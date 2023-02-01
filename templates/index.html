@@ -41,15 +41,15 @@
     </h1>
 
     <form  method = post enctype=multipart/form-data>
-        <input class = "btn-info" type = file name= image>
+        <input class = "btn-info" type = "file" name= "image">
         <br>
 
-        <input class="btn-info" type = submit value = ClassifyandDetect>
+        <input class="btn-info" type = "submit" value = "ClassifyandDetect">
         
         <br>
         {% if image_loc %}
-        <img class = "mb-4" src= "static/upload/{{image_loc}}" alt = " " width = "256" height = "256"> -->
-        <h3>Predictions : {{prediction}}</h3>
+        <img class = "mb-4" src= "static/upload/{{image_loc}}" alt = " " width = "256" height = "256">
+        <!--h3>Predictions : {{prediction}}</h3-->
         {% endif %} 
     </form>
 </body>

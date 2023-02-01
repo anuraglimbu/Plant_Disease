@@ -6,15 +6,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from PIL import Image
-from tensorflow.python.keras.models import load_model
-from tensorflow.python.keras.preprocessing import image
-from tensorflow.python.keras.applications.imagenet_utils import preprocess_input,decode_predictions
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.imagenet_utils import preprocess_input,decode_predictions
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as viz_utils
 from flask import request
 from flask import Flask,render_template
-
-
 
 app = Flask(__name__)
 
@@ -267,14 +265,14 @@ treatments = [
 
 
 
-UPLOAD_FOLDER = "C:/Users/Rabin/Desktop/Image_classification/static"
+UPLOAD_FOLDER = os.getcwd() #"C:/Users/Rabin/Desktop/Image_classification/static"
 
 #MODEL_PATH = 'model.h5'
 model = load_model('model.h5')
 PATH_TO_SAVED_MODEL = "saved_model"
 PATH_TO_LABELS = "leaves_label_map.pbtxt"
 
-def model_predict(img_path,model):
+def model_predict(img_path, model):
     img = img = image.load_img(img_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
@@ -346,14 +344,14 @@ def DetectImage():
             )
             image_file.save(image_location)
             preds = model_predict(image_location,model)
-            preds_object = object_model_predict(image_location,PATH_TO_SAVED_MODEL,PATH_TO_LABELS)
-            #im = Image.fromarray(preds_object)
-            im = Image.fromarray((preds_object * 255).astype(np.uint8))
+            preds_object = object_model_predict(image_location, PATH_TO_SAVED_MODEL, PATH_TO_LABELS)
+            im = Image.fromarray(preds_object)
+            #im = Image.fromarray((preds_object * 255).astype(np.uint8))
             im.save('static/upload/' + image_file.filename)
             print(preds_object) 
 
-            return render_template("index.html",prediction=class_label[int(preds)],treatment=treatments[int(preds)],image_loc=image_file.filename)
-            #return render_template("index.html",image_loc=image_file.filename)
+            #return render_template("index.html",prediction=class_label[int(preds)], treatment=treatments[int(preds)], image_loc=image_file.filename)
+            return render_template("index.html",image_loc=image_file.filename)
 
     return render_template('index.html',prediction=None,image_loc=None)
 
